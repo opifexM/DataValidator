@@ -20,3 +20,5 @@ target/
 *.iml
 *.iws
 /app/.gradle/
+/app/build/
+/app/out/
