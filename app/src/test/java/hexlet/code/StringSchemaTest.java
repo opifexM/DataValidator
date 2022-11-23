@@ -59,24 +59,28 @@ class StringSchemaTest {
 
     @Test
     void testIsValid_ShouldTrue_WhenMinLengthInputText() {
+        schema.required();
         schema.minLength(3);
         assertTrue(schema.isValid("text text"));
     }
 
     @Test
     void testIsValid_ShouldFalse_WhenMinLengthInputText() {
+        schema.required();
         schema.minLength(300);
         assertFalse(schema.isValid("text text"));
     }
 
     @Test
     void testIsValid_ShouldTrue_WhenContainsInputText() {
+        schema.required();
         schema.contains("text");
         assertTrue(schema.isValid("text text"));
     }
 
     @Test
     void testIsValid_ShouldFalse_WhenContainsInputText() {
+        schema.required();
         schema.contains("texttexttext");
         assertFalse(schema.isValid("text text"));
     }
