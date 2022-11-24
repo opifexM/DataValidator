@@ -1,36 +1,40 @@
 package hexlet.code.schemas;
 
-import static java.util.Objects.isNull;
-
 public class NumberSchema extends BaseSchema {
-    private boolean positive;
+    private boolean positiveRule;
+    private boolean rangeRule;
     private int rangeStart;
     private int rangeFinish;
 
     @Override
     public boolean isValid(Object objText) {
-        if (!required && !positive) {
-            return true;
-        } else if (required && isNull(objText)) {
+        if (!super.isValid(objText)) {
             return false;
-        } else if (positive && isNull(objText)) {
-            return true;
-        } else if (objText instanceof Integer number) {
-            boolean isPositive = number > 0;
-            boolean isRange = (rangeStart == rangeFinish)
-                    || (number >= rangeStart && number <= rangeFinish);
-
-            return isPositive && isRange;
         }
-        return false;
+
+        boolean isInteger = objText instanceof Integer;
+        if (requiredRule && !isInteger) {
+            return false;
+        }
+        if (positiveRule && isInteger && (Integer) objText <= 0) {
+            return false;
+        }
+        if (rangeRule && isInteger && ((Integer) objText < rangeStart || (Integer) objText > rangeFinish)) {
+            return false;
+        }
+        return true;
     }
 
     public NumberSchema positive() {
-        positive = true;
+        positiveRule = true;
         return this;
     }
 
     public void range(int start, int finish) {
+        if (start > finish) {
+            throw new IllegalArgumentException("Range is not valid.");
+        }
+        rangeRule = true;
         rangeStart = start;
         rangeFinish = finish;
     }

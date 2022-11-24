@@ -1,15 +1,18 @@
 package hexlet.code.schemas;
 
 public class BaseSchema {
-    protected boolean required;
+    protected boolean requiredRule;
 
     public BaseSchema required() {
-        required = true;
+        requiredRule = true;
         return this;
     }
 
-    protected boolean isValid(Object value) {
-        return false;
+    protected boolean isValid(Object objText) {
+        if (requiredRule && objText == null) {
+            return false;
+        }
+        return true;
     }
 
     public BaseSchema contains(String value) {
