@@ -11,4 +11,8 @@ public class BaseSchema {
     protected boolean isValid(Object value) {
         return false;
     }
+
+    public BaseSchema contains(String ya) {
+        return this;
+    }
 }
