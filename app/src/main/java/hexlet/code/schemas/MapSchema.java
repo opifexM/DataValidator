@@ -12,31 +12,33 @@ public class MapSchema extends BaseSchema {
     public boolean isValid(Object objText) {
         if (!required) {
             return true;
-        }
-        if (isNull(objText)) {
+        } else if (isNull(objText)) {
             return false;
+        } else if (objText instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>) objText;
+            boolean isSizeof = sizeof <= -1 || map.size() == sizeof;
+            if (!map.isEmpty()
+                    && !isNull(schemaMap) && !schemaMap.isEmpty()
+                    && !checkValues(map)) {
+                return false;
+            }
+            return isSizeof;
         }
-        if (!(objText instanceof Map)) {
-            return false;
-        }
-        Map<String, Object> map = (Map<String, Object>) objText;
+        return false;
+    }
 
-        boolean isSizeof = sizeof <= -1 || map.size() == sizeof;
-
-        if (!map.isEmpty() && !isNull(schemaMap) && !schemaMap.isEmpty()) {
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                if (schemaMap.containsKey(key)) {
-                    BaseSchema baseSchema = schemaMap.get(key);
-                    boolean check = baseSchema.isValid(value);
-                    if (!check) {
-                        return false;
-                    }
+    private boolean checkValues(Map<String, Object> map) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (schemaMap.containsKey(key)) {
+                BaseSchema baseSchema = schemaMap.get(key);
+                if (!baseSchema.isValid(value)) {
+                    return false;
                 }
             }
         }
-        return isSizeof;
+        return true;
     }
 
     public void sizeof(int number) {

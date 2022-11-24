@@ -13,27 +13,24 @@ public class StringSchema extends BaseSchema {
     public boolean isValid(Object objText) {
         if (!required) {
             return true;
-        }
-        if (isNull(objText) || objText.toString().isEmpty()) {
+        } else if (isNull(objText)) {
             return false;
-        }
-        String text = objText.toString();
-
-        boolean isValidateMinLength = text.length() >= minLength;
-
-        boolean isValidateRequired = !text.replaceAll("[^a-zA-Z]", "").isEmpty();
-
-        boolean isValidateContains = true;
-        for (String word : dictionary) {
-            if (!text.contains(word)) {
-                isValidateContains = false;
-                break;
+        } else if (objText instanceof String text) {
+            boolean isValidateMinLength = text.length() >= minLength;
+            boolean isValidateRequired = !text.replaceAll("[^a-zA-Z]", "").isEmpty();
+            boolean isValidateContains = true;
+            for (String word : dictionary) {
+                if (!text.contains(word)) {
+                    isValidateContains = false;
+                    break;
+                }
             }
+            return isValidateMinLength && isValidateRequired && isValidateContains;
         }
-
-        return isValidateMinLength && isValidateRequired && isValidateContains;
+        return false;
     }
 
+    @Override
     public StringSchema contains(String word) {
         if (!isNull(word)) {
             dictionary.add(word);

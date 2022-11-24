@@ -12,7 +12,7 @@ public class BaseSchema {
         return false;
     }
 
-    public BaseSchema contains(String ya) {
+    public BaseSchema contains(String value) {
         return this;
     }
 }

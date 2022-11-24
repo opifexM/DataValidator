@@ -11,27 +11,18 @@ public class NumberSchema extends BaseSchema {
     public boolean isValid(Object objText) {
         if (!required && !positive) {
             return true;
-        }
-        if (required && isNull(objText)) {
+        } else if (required && isNull(objText)) {
             return false;
-        }
-        if (positive && isNull(objText)) {
-            objText = Integer.MAX_VALUE;
-        }
-        if (objText.toString().isEmpty()) {
-            return false;
-        }
-        if (!objText.toString().chars().allMatch(Character::isDigit)) {
-            return false;
-        }
-        int number = Integer.parseInt(objText.toString());
+        } else if (positive && isNull(objText)) {
+            return true;
+        } else if (objText instanceof Integer number) {
+            boolean isPositive = number > 0;
+            boolean isRange = (rangeStart == rangeFinish)
+                    || (number >= rangeStart && number <= rangeFinish);
 
-        boolean isPositive = number > 0;
-
-        boolean isRange = (rangeStart == rangeFinish)
-                || (number >= rangeStart && number <= rangeFinish);
-
-        return isPositive && isRange;
+            return isPositive && isRange;
+        }
+        return false;
     }
 
     public NumberSchema positive() {
