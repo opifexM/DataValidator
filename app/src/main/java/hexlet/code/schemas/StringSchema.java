@@ -56,4 +56,9 @@ public class StringSchema extends BaseSchema {
         return this;
     }
 
+    @Override
+    public StringSchema required() {
+        super.required();
+        return this;
+    }
 }

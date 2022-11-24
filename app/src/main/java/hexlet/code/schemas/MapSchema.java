@@ -54,4 +54,10 @@ public class MapSchema extends BaseSchema {
         schemaMap = schemas;
         schemaRule = true;
     }
+
+    @Override
+    public MapSchema required() {
+        super.required();
+        return this;
+    }
 }

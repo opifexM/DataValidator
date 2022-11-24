@@ -38,4 +38,10 @@ public class NumberSchema extends BaseSchema {
         rangeStart = start;
         rangeFinish = finish;
     }
+
+    @Override
+    public NumberSchema required() {
+        super.required();
+        return this;
+    }
 }
