@@ -63,5 +63,4 @@ class MapSchemaTest {
         schema.sizeof(3);
         assertFalse(schema.isValid(map));
     }
-
 }

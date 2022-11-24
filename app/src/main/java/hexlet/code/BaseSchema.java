@@ -3,12 +3,12 @@ package hexlet.code;
 public class BaseSchema {
     protected boolean required;
 
-//    public boolean isValid(Object objText) {
-//        if (objText)
-//
-//    }
-
-    public void required() {
+    public BaseSchema required() {
         required = true;
+        return this;
+    }
+
+    protected boolean isValid(Object objText) {
+        return false;
     }
 }

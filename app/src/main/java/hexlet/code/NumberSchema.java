@@ -8,10 +8,19 @@ public class NumberSchema extends BaseSchema {
     private int rangeFinish;
 
     public boolean isValid(Object objText) {
-        if (!required) {
+        if (!required && !positive) {
             return true;
         }
-        if (isNull(objText) || objText.toString().isEmpty()) {
+        if (required && isNull(objText)) {
+            return false;
+        }
+        if (positive && isNull(objText)) {
+            objText = Integer.MAX_VALUE;
+        }
+        if (isNull(objText) && !positive) {
+            return false;
+        }
+        if (objText.toString().isEmpty()) {
             return false;
         }
         if (!objText.toString().chars().allMatch(Character::isDigit)) {
@@ -19,7 +28,7 @@ public class NumberSchema extends BaseSchema {
         }
         int number = Integer.parseInt(objText.toString());
 
-        boolean isPositive = !positive || number > 0;
+        boolean isPositive = number > 0;
 
         boolean isRange = (rangeStart == rangeFinish)
                 || (number >= rangeStart && number <= rangeFinish);
