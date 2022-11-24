@@ -1,6 +1,5 @@
 package hexlet.code;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Objects.isNull;
@@ -9,6 +8,7 @@ public class MapSchema extends BaseSchema {
     private int sizeof = -1;
     Map<String, BaseSchema> schemaMap;
 
+    @Override
     public boolean isValid(Object objText) {
         if (!required) {
             return true;

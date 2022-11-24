@@ -9,6 +9,7 @@ public class StringSchema extends BaseSchema {
     private final List<String> dictionary = new ArrayList<>();
     private int minLength;
 
+    @Override
     public boolean isValid(Object objText) {
         if (!required) {
             return true;

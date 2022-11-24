@@ -7,6 +7,7 @@ public class NumberSchema extends BaseSchema {
     private int rangeStart;
     private int rangeFinish;
 
+    @Override
     public boolean isValid(Object objText) {
         if (!required && !positive) {
             return true;
@@ -16,9 +17,6 @@ public class NumberSchema extends BaseSchema {
         }
         if (positive && isNull(objText)) {
             objText = Integer.MAX_VALUE;
-        }
-        if (isNull(objText) && !positive) {
-            return false;
         }
         if (objText.toString().isEmpty()) {
             return false;

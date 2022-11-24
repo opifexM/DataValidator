@@ -8,7 +8,7 @@ public class BaseSchema {
         return this;
     }
 
-    protected boolean isValid(Object objText) {
+    protected boolean isValid(Object value) {
         return false;
     }
 }
