@@ -66,6 +66,17 @@ class StringSchemaTest {
     }
 
     @Test
+    void testIsValid_ShouldTrue_WhenMinLengthWithReturnInputText() {
+        schema.required();
+        assertTrue(schema.minLength(3).isValid("text text"));
+    }
+
+    @Test
+    void testIsValid_ShouldTrue_WhenRequiredWithReturnInputText() {
+        assertTrue(schema.required().minLength(3).isValid("text text"));
+    }
+
+    @Test
     void testIsValid_ShouldFalse_WhenMinLengthInputText() {
         schema.required();
         schema.minLength(300);

@@ -9,13 +9,7 @@ public class BaseSchema {
     }
 
     protected boolean isValid(Object objText) {
-        if (requiredRule && objText == null) {
-            return false;
-        }
-        return true;
-    }
-
-    public BaseSchema contains(String value) {
-        return this;
+        return !requiredRule || objText != null;
     }
 }
+

@@ -11,19 +11,19 @@ public class MapSchema extends BaseSchema {
     private boolean schemaRule;
 
     @Override
-    public boolean isValid(Object objText) {
-        if (!super.isValid(objText)) {
+    public boolean isValid(Object object) {
+        if (!super.isValid(object)) {
             return false;
         }
 
-        boolean isMap = objText instanceof Map<?, ?>;
+        boolean isMap = object instanceof Map<?, ?>;
         if (requiredRule && !isMap) {
             return false;
         }
-        if (sizeofRule && isMap && ((Map<?, ?>) objText).size() != sizeof) {
+        if (sizeofRule && isMap && ((Map<?, ?>) object).size() != sizeof) {
             return false;
         }
-        if (schemaRule && isMap && !checkValues((Map<String, Object>) objText)) {
+        if (schemaRule && isMap && !checkValues((Map<String, Object>) object)) {
             return false;
         }
         return true;

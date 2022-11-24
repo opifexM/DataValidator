@@ -39,7 +39,7 @@ public class StringSchema extends BaseSchema {
         return true;
     }
 
-    @Override
+
     public StringSchema contains(String word) {
         if (!isNull(word)) {
             dictionary.add(word);

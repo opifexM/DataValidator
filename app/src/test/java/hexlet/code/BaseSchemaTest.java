@@ -35,6 +35,21 @@ class BaseSchemaTest {
     }
 
     @Test
+    void testIsValid_ShouldTrue_WhenShapeInputMapWithContain() {
+        schema = validator.map();
+
+        Map<String, BaseSchema> shapeMapSchemas = new HashMap<>();
+        shapeMapSchemas.put("name", validator.string().required().contains("oly"));
+        shapeMapSchemas.put("age", validator.number().positive());
+        schema.shape(shapeMapSchemas);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "Kolya");
+        map.put("age", 100);
+        assertTrue(schema.isValid(map));
+    }
+
+    @Test
     void testIsValid_ShouldTrue_WhenShapeInputMapWithNull() {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "Maya");
