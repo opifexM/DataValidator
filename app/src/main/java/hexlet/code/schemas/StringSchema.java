@@ -5,7 +5,7 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-public class StringSchema extends BaseSchema {
+public final class StringSchema extends BaseSchema {
     private final List<String> dictionary = new ArrayList<>();
     private int minLength;
     private boolean lengthRule;
