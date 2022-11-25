@@ -4,11 +4,12 @@ import hexlet.code.schemas.NumberSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NumberSchemaTest {
 
-    NumberSchema schema;
+    private NumberSchema schema;
 
     @BeforeEach
     void setUp() {
@@ -16,91 +17,91 @@ class NumberSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputText() {
+    void testIsValidShouldTrueWhenNoRequiredInputText() {
         assertTrue(schema.isValid("text"));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputEmpty() {
+    void testIsValidShouldTrueWhenNoRequiredInputEmpty() {
         assertTrue(schema.isValid(""));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputNull() {
+    void testIsValidShouldTrueWhenNoRequiredInputNull() {
         assertTrue(schema.isValid(null));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputInteger() {
+    void testIsValidShouldTrueWhenNoRequiredInputInteger() {
         assertTrue(schema.isValid(123));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRequiredInputText() {
+    void testIsValidShouldFalseWhenRequiredInputText() {
         schema.required();
         assertFalse(schema.isValid("text"));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRequiredInputEmpty() {
+    void testIsValidShouldFalseWhenRequiredInputEmpty() {
         schema.required();
         assertFalse(schema.isValid(""));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRequiredInputNull() {
+    void testIsValidShouldFalseWhenRequiredInputNull() {
         schema.required();
         assertFalse(schema.isValid(null));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenRequiredInputInteger() {
+    void testIsValidShouldTrueWhenRequiredInputInteger() {
         schema.required();
         assertTrue(schema.isValid(123));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenPositiveInputPositiveInteger() {
+    void testIsValidShouldTrueWhenPositiveInputPositiveInteger() {
         schema.required();
         schema.positive();
         assertTrue(schema.isValid(123));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenPositiveInputZero() {
+    void testIsValidShouldFalseWhenPositiveInputZero() {
         schema.required();
         assertFalse(schema.positive().isValid(0));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenPositiveInputNegativeInteger() {
+    void testIsValidShouldFalseWhenPositiveInputNegativeInteger() {
         schema.required();
         assertFalse(schema.positive().isValid(-123));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenRangeInputCorrectInteger() {
+    void testIsValidShouldTrueWhenRangeInputCorrectInteger() {
         schema.required();
         schema.range(100, 200);
         assertTrue(schema.isValid(123));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenRangeInputSameInteger() {
+    void testIsValidShouldTrueWhenRangeInputSameInteger() {
         schema.required();
         schema.range(123, 123);
         assertTrue(schema.isValid(123));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRangeInputLessInteger() {
+    void testIsValidShouldFalseWhenRangeInputLessInteger() {
         schema.required();
         schema.range(100, 200);
         assertFalse(schema.isValid(50));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRangeInputMoreInteger() {
+    void testIsValidShouldFalseWhenRangeInputMoreInteger() {
         schema.required();
         schema.range(100, 200);
         assertFalse(schema.isValid(300));

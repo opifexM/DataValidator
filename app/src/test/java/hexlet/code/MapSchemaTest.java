@@ -7,11 +7,12 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MapSchemaTest {
 
-    MapSchema schema;
+    private MapSchema schema;
 
     @BeforeEach
     void setUp() {
@@ -19,25 +20,25 @@ class MapSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputNull() {
+    void testIsValidShouldTrueWhenNoRequiredInputNull() {
         assertTrue(schema.isValid(null));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRequiredInputNull() {
+    void testIsValidShouldFalseWhenRequiredInputNull() {
         schema.required();
         assertFalse(schema.isValid(null));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenRequiredInputEmptyMap() {
+    void testIsValidShouldTrueWhenRequiredInputEmptyMap() {
         Map<String, String> map = new HashMap<>();
         schema.required();
         assertTrue(schema.isValid(map));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenRequiredInputMap() {
+    void testIsValidShouldTrueWhenRequiredInputMap() {
         Map<String, String> map = new HashMap<>();
         map.put("key1", "value1");
         schema.required();
@@ -45,7 +46,7 @@ class MapSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenMinSizeInputMap() {
+    void testIsValidShouldTrueWhenMinSizeInputMap() {
         Map<String, String> map = new HashMap<>();
         map.put("key1", "value1");
         map.put("key2", "value2");
@@ -56,7 +57,7 @@ class MapSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenMinSizeInputLessMap() {
+    void testIsValidShouldFalseWhenMinSizeInputLessMap() {
         Map<String, String> map = new HashMap<>();
         map.put("key1", "value1");
         map.put("key2", "value2");

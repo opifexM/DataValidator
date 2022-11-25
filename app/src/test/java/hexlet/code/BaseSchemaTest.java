@@ -8,12 +8,13 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BaseSchemaTest {
 
-    Validator validator;
-    MapSchema schema;
+    private Validator validator;
+    private MapSchema schema;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +28,7 @@ class BaseSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenShapeInputMap() {
+    void testIsValidShouldTrueWhenShapeInputMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "Kolya");
         map.put("age", 100);
@@ -35,7 +36,7 @@ class BaseSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenShapeInputMapWithContain() {
+    void testIsValidShouldTrueWhenShapeInputMapWithContain() {
         schema = validator.map();
 
         Map<String, BaseSchema> shapeMapSchemas = new HashMap<>();
@@ -50,7 +51,7 @@ class BaseSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenShapeInputMapWithNull() {
+    void testIsValidShouldTrueWhenShapeInputMapWithNull() {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "Maya");
         map.put("age", null);
@@ -58,7 +59,7 @@ class BaseSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenShapeInputMapWithEmptyAndNull() {
+    void testIsValidShouldFalseWhenShapeInputMapWithEmptyAndNull() {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "");
         map.put("age", null);
@@ -66,7 +67,7 @@ class BaseSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenShapeInputMapWithNegativeNumber() {
+    void testIsValidShouldFalseWhenShapeInputMapWithNegativeNumber() {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "Valya");
         map.put("age", -5);

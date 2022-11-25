@@ -4,10 +4,11 @@ import hexlet.code.schemas.StringSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StringSchemaTest {
-    StringSchema schema;
+    private StringSchema schema;
 
     @BeforeEach
     void setUp() {
@@ -15,83 +16,83 @@ class StringSchemaTest {
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputText() {
+    void testIsValidShouldTrueWhenNoRequiredInputText() {
         assertTrue(schema.isValid("text"));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputEmpty() {
+    void testIsValidShouldTrueWhenNoRequiredInputEmpty() {
         assertTrue(schema.isValid(""));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputNull() {
+    void testIsValidShouldTrueWhenNoRequiredInputNull() {
         assertTrue(schema.isValid(null));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenNoRequiredInputInteger() {
+    void testIsValidShouldTrueWhenNoRequiredInputInteger() {
         assertTrue(schema.isValid(123));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenRequiredInputText() {
+    void testIsValidShouldTrueWhenRequiredInputText() {
         schema.required();
         assertTrue(schema.isValid("text"));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRequiredInputEmpty() {
+    void testIsValidShouldFalseWhenRequiredInputEmpty() {
         schema.required();
         assertFalse(schema.isValid(""));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRequiredInputNull() {
+    void testIsValidShouldFalseWhenRequiredInputNull() {
         schema.required();
         assertFalse(schema.isValid(null));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenRequiredInputInteger() {
+    void testIsValidShouldFalseWhenRequiredInputInteger() {
         schema.required();
         assertFalse(schema.isValid(123));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenMinLengthInputText() {
+    void testIsValidShouldTrueWhenMinLengthInputText() {
         schema.required();
         schema.minLength(3);
         assertTrue(schema.isValid("text text"));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenMinLengthWithReturnInputText() {
+    void testIsValidShouldTrueWhenMinLengthWithReturnInputText() {
         schema.required();
         assertTrue(schema.minLength(3).isValid("text text"));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenRequiredWithReturnInputText() {
+    void testIsValidShouldTrueWhenRequiredWithReturnInputText() {
         assertTrue(schema.required().minLength(3).isValid("text text"));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenMinLengthInputText() {
+    void testIsValidShouldFalseWhenMinLengthInputText() {
         schema.required();
         schema.minLength(300);
         assertFalse(schema.isValid("text text"));
     }
 
     @Test
-    void testIsValid_ShouldTrue_WhenContainsInputText() {
+    void testIsValidShouldTrueWhenContainsInputText() {
         schema.required();
         schema.contains("text");
         assertTrue(schema.isValid("text text"));
     }
 
     @Test
-    void testIsValid_ShouldFalse_WhenContainsInputText() {
+    void testIsValidShouldFalseWhenContainsInputText() {
         schema.required();
         schema.contains("texttexttext");
         assertFalse(schema.isValid("text text"));
