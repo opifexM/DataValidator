@@ -1,7 +1,7 @@
 package hexlet.code.schemas;
 
 public abstract class BaseSchema {
-    boolean requiredRule;
+    private boolean requiredRule;
 
     /**
      * @return turn on validation for null
