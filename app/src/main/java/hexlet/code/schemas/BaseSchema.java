@@ -1,7 +1,7 @@
 package hexlet.code.schemas;
 
 public abstract class BaseSchema {
-    protected boolean requiredRule;
+    boolean requiredRule;
 
     public BaseSchema required() {
         requiredRule = true;
