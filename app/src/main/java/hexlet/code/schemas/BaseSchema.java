@@ -12,4 +12,3 @@ public abstract class BaseSchema {
         return !requiredRule || objText != null;
     }
 }
-

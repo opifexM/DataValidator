@@ -4,10 +4,10 @@ import java.util.Map;
 
 import static java.util.Objects.isNull;
 
-public class MapSchema extends BaseSchema {
+public final class MapSchema extends BaseSchema {
     private int sizeof = -1;
     private boolean sizeofRule;
-    Map<String, BaseSchema> schemaMap;
+    private Map<String, BaseSchema> schemaMap;
     private boolean schemaRule;
 
     @Override
