@@ -17,13 +17,13 @@ class NumberSchemaTest {
     }
 
     @Test
-    void testIsValidShouldTrueWhenNoRequiredInputText() {
-        assertTrue(schema.isValid("text"));
+    void testIsValidShouldFalseWhenNoRequiredInputText() {
+        assertFalse(schema.isValid("text"));
     }
 
     @Test
-    void testIsValidShouldTrueWhenNoRequiredInputEmpty() {
-        assertTrue(schema.isValid(""));
+    void testIsValidShouldFalseWhenNoRequiredInputEmpty() {
+        assertFalse(schema.isValid(""));
     }
 
     @Test

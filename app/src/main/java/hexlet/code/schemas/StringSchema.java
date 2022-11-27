@@ -2,7 +2,6 @@ package hexlet.code.schemas;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -18,19 +17,20 @@ public final class StringSchema extends BaseSchema {
     public boolean isValid(Object object) {
         Predicate<Object> isNotNull = objectValue -> !isNull(objectValue);
         Predicate<Object> isString = String.class::isInstance;
-
-        Predicate<String> textContain = objectText ->
-                dictionary.stream()
-                        .allMatch(objectText::contains);
         Function<Object, String> convertToString = String.class::cast;
 
         Predicate<String> checkRequiredRule = objectText ->
                 !requiredRule && isNotNull.negate().test(object)
                         || !requiredRule && isString.test(object)
                         || requiredRule && isString.test(object) && !objectText.isEmpty();
+
         Predicate<String> checkLengthRule = objectText ->
                 !lengthRule
                         || isString.test(object) && objectText.length() >= minLength;
+
+        Predicate<String> textContain = objectText ->
+                dictionary.stream()
+                        .allMatch(objectText::contains);
         Predicate<String> checkDictionaryRule = objectText ->
                 !dictionaryRule
                         || isString.test(object) && textContain.test(objectText);

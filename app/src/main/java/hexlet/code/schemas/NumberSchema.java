@@ -1,5 +1,12 @@
 package hexlet.code.schemas;
 
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
+import static java.util.Objects.isNull;
+
 public final class NumberSchema extends BaseSchema {
     private boolean positiveRule;
     private boolean rangeRule;
@@ -7,22 +14,38 @@ public final class NumberSchema extends BaseSchema {
     private int rangeFinish;
 
     @Override
-    public boolean isValid(Object objText) {
-        if (!super.isValid(objText)) {
-            return false;
-        }
+    public boolean isValid(Object object) {
+        Predicate<Object> isNotNull = objectValue -> !isNull(objectValue);
+        Predicate<Object> isInteger = Integer.class::isInstance;
+        ToIntFunction<Object> convertToInteger = Integer.class::cast;
 
-        boolean isInteger = objText instanceof Integer;
-        if (requiredRule && !isInteger) {
-            return false;
-        }
-        if (positiveRule && isInteger && (Integer) objText <= 0) {
-            return false;
-        }
-        if (rangeRule && isInteger && ((Integer) objText < rangeStart || (Integer) objText > rangeFinish)) {
-            return false;
-        }
-        return true;
+        IntPredicate checkRequiredRule = objectInteger ->
+                !requiredRule && isNotNull.negate().test(object)
+                        || isInteger.test(object);
+
+        IntPredicate checkPositiveRule = objectInteger ->
+                !positiveRule
+                        || isInteger.test(object) && objectInteger > 0;
+
+        IntPredicate checkRangeRule = objectInteger ->
+                !rangeRule
+                        || isInteger.test(object) && objectInteger >= rangeStart && objectInteger <= rangeFinish;
+
+//        boolean test1 = isNotNull.test(object);
+//        boolean test2 = isInteger.test(object);
+//
+//        if (isInteger.test(object)) {
+//            Integer test = (Integer) object;
+//            boolean t1 = checkRequiredRule.test(Void voidd);
+//            boolean t2 = checkPositiveRule.test(test);
+//            boolean t3 = checkRangeRule.test(test);
+//            System.out.println();
+//        }
+
+        return checkRequiredRule.and(checkPositiveRule.and(checkRangeRule))
+                .test(isNotNull.and(isInteger).test(object)
+                        ? convertToInteger.applyAsInt(object)
+                        : 0);
     }
 
     public NumberSchema positive() {
