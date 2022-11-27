@@ -31,8 +31,8 @@ class StringSchemaTest {
     }
 
     @Test
-    void testIsValidShouldTrueWhenNoRequiredInputInteger() {
-        assertTrue(schema.isValid(123));
+    void testIsValidShouldFalseWhenNoRequiredInputInteger() {
+        assertFalse(schema.isValid(123));
     }
 
     @Test
