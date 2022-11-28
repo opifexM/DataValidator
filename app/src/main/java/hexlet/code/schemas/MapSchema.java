@@ -2,9 +2,7 @@ package hexlet.code.schemas;
 
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.IntPredicate;
 import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
 
 import static java.util.Objects.isNull;
 
@@ -28,56 +26,20 @@ public final class MapSchema extends BaseSchema {
                 !sizeofRule
                         || isMap.test(object) && objectMap.size() == sizeof;
 
+        Predicate<Map<String, String>> checkShapeValues = objectMap ->
+                objectMap.entrySet().stream()
+                        .allMatch(stringStringEntry ->
+                                schemaMap.containsKey(stringStringEntry.getKey())
+                                && schemaMap.get(stringStringEntry.getKey()).isValid(stringStringEntry.getValue()));
         Predicate<Map<String, String>> checkSchemaRule = objectMap ->
                 !schemaRule
                         || schemaMap.isEmpty()
-                        || isMap.test(object) && objectMap.size() == sizeof;
+                        || isMap.test(object) && checkShapeValues.test(objectMap);
 
-
-//        Predicate<String> checkDictionaryRule = objectText ->
-//                !dictionaryRule
-//                        || isString.test(object) && textContain.test(objectText);
-
-        boolean test1 = isNotNull.test(object);
-        boolean test2 = isMap.test(object);
-
-        if (isMap.test(object)) {
-            Map test = (Map) object;
-            boolean t1 = checkRequiredRule.test(test);
-            boolean t2 = checkSizeofRule.test(test);
-            System.out.println();
-        }
-
-//        Predicate<Map<String, String>> checkShapeValues = objectMap ->
-//                objectMap.entrySet().stream()
-//                        .allMatch(stringStringEntry -> {
-//                            if (!schemaMap.containsKey(stringStringEntry.getKey())) {
-//                                return false;
-//                            }
-//
-//                            return
-//                        });
-
-        return checkRequiredRule.and(checkSizeofRule)
+        return checkRequiredRule.and(checkSizeofRule.and(checkSchemaRule))
                 .test(isNotNull.and(isMap).test(object)
                         ? convertToMap.apply(object)
                         : Map.of());
-    }
-
-    private boolean checkValues(Map<String, Object> map) {
-        if (!map.isEmpty() && !isNull(schemaMap) && !schemaMap.isEmpty()) {
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                if (schemaMap.containsKey(key)) {
-                    BaseSchema baseSchema = schemaMap.get(key);
-                    if (!baseSchema.isValid(value)) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
     }
 
     public void sizeof(int number) {

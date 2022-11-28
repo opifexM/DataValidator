@@ -1,6 +1,5 @@
 package hexlet.code.schemas;
 
-import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
@@ -25,22 +24,12 @@ public final class NumberSchema extends BaseSchema {
 
         IntPredicate checkPositiveRule = objectInteger ->
                 !positiveRule
+                        || isNotNull.negate().test(object)
                         || isInteger.test(object) && objectInteger > 0;
 
         IntPredicate checkRangeRule = objectInteger ->
                 !rangeRule
                         || isInteger.test(object) && objectInteger >= rangeStart && objectInteger <= rangeFinish;
-
-//        boolean test1 = isNotNull.test(object);
-//        boolean test2 = isInteger.test(object);
-//
-//        if (isInteger.test(object)) {
-//            Integer test = (Integer) object;
-//            boolean t1 = checkRequiredRule.test(Void voidd);
-//            boolean t2 = checkPositiveRule.test(test);
-//            boolean t3 = checkRangeRule.test(test);
-//            System.out.println();
-//        }
 
         return checkRequiredRule.and(checkPositiveRule.and(checkRangeRule))
                 .test(isNotNull.and(isInteger).test(object)
