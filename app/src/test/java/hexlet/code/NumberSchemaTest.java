@@ -106,5 +106,4 @@ class NumberSchemaTest {
         schema.range(100, 200);
         assertFalse(schema.isValid(300));
     }
-
 }

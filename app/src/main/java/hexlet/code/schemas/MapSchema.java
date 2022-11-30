@@ -18,6 +18,13 @@ public final class MapSchema extends BaseSchema {
         Predicate<Object> isMap = Map.class::isInstance;
         Function<Object, Map<String, String>> convertToMap = Map.class::cast;
 
+//        Map<String, List> a1 = new HashMap<>();
+//        a1.put("test", new ArrayList<>());
+//
+//        Map<String, String> a2 = convertToMap.apply(a1);
+//
+
+
         Predicate<Map<String, String>> checkRequiredRule = objectMap ->
                 !requiredRule && isNotNull.negate().test(object)
                         || isMap.test(object);
@@ -35,6 +42,9 @@ public final class MapSchema extends BaseSchema {
                 !schemaRule
                         || schemaMap.isEmpty()
                         || isMap.test(object) && checkShapeValues.test(objectMap);
+
+//        boolean test = isMap.test(object);
+//        Map<String, String> apply = convertToMap.apply(object);
 
         return checkRequiredRule.and(checkSizeofRule.and(checkSchemaRule))
                 .test(isNotNull.and(isMap).test(object)
