@@ -1,70 +1,44 @@
 package hexlet.code.schemas;
 
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.util.Objects.isNull;
 
 public final class MapSchema extends BaseSchema {
-    private int sizeof = -1;
-    private boolean sizeofRule;
-    private Map<String, BaseSchema> schemaMap;
-    private boolean schemaRule;
+    private static final Predicate<Object> IS_MAP = Map.class::isInstance;
+    private static final Predicate<Object> IS_NULL_OR_MAP = objectValue ->
+            isNull(objectValue) || objectValue instanceof Map;
 
-    @Override
-    public boolean isValid(Object object) {
-        Predicate<Object> isNotNull = objectValue -> !isNull(objectValue);
-        Predicate<Object> isMap = Map.class::isInstance;
-        Function<Object, Map<String, String>> convertToMap = Map.class::cast;
+    public MapSchema() {
+        addCheck(Rules.IS_NULL_OR_MAP, IS_NULL_OR_MAP);
+    }
 
-//        Map<String, List> a1 = new HashMap<>();
-//        a1.put("test", new ArrayList<>());
-//
-//        Map<String, String> a2 = convertToMap.apply(a1);
-//
-
-
-        Predicate<Map<String, String>> checkRequiredRule = objectMap ->
-                !requiredRule && isNotNull.negate().test(object)
-                        || isMap.test(object);
-
-        Predicate<Map<String, String>> checkSizeofRule = objectMap ->
-                !sizeofRule
-                        || isMap.test(object) && objectMap.size() == sizeof;
-
-        Predicate<Map<String, String>> checkShapeValues = objectMap ->
-                objectMap.entrySet().stream()
-                        .allMatch(stringStringEntry ->
-                                schemaMap.containsKey(stringStringEntry.getKey())
-                                && schemaMap.get(stringStringEntry.getKey()).isValid(stringStringEntry.getValue()));
-        Predicate<Map<String, String>> checkSchemaRule = objectMap ->
-                !schemaRule
-                        || schemaMap.isEmpty()
-                        || isMap.test(object) && checkShapeValues.test(objectMap);
-
-//        boolean test = isMap.test(object);
-//        Map<String, String> apply = convertToMap.apply(object);
-
-        return checkRequiredRule.and(checkSizeofRule.and(checkSchemaRule))
-                .test(isNotNull.and(isMap).test(object)
-                        ? convertToMap.apply(object)
-                        : Map.of());
+    private void addRuleOnlyMapObject() {
+        deleteCheck(Rules.IS_NULL_OR_MAP);
+        addCheck(Rules.IS_MAP, IS_MAP);
     }
 
     public void sizeof(int number) {
-        sizeof = number;
-        sizeofRule = true;
+        addRuleOnlyMapObject();
+        Predicate<Object> checkSizeofRule = objectValue -> ((Map<?, ?>) objectValue).size() == number;
+        addCheck(Rules.SIZE_OF, checkSizeofRule);
+    }
+
+    public MapSchema required() {
+        addRuleOnlyMapObject();
+        return this;
     }
 
     public void shape(Map<String, BaseSchema> schemas) {
-        schemaMap = schemas;
-        schemaRule = true;
-    }
-
-    @Override
-    public MapSchema required() {
-        super.required();
-        return this;
+        addRuleOnlyMapObject();
+        if (!isNull(schemas) && !schemas.isEmpty()) {
+            Predicate<Object> checkShapeValues = objectValue ->
+                    ((Map<?, ?>) objectValue).entrySet().stream()
+                            .allMatch(entry ->
+                                    schemas.containsKey(entry.getKey())
+                                            && schemas.get(entry.getKey()).isValid(entry.getValue()));
+            addCheck(Rules.SHAPE, checkShapeValues);
+        }
     }
 }

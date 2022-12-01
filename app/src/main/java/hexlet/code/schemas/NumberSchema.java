@@ -1,44 +1,26 @@
 package hexlet.code.schemas;
 
-import java.util.function.IntPredicate;
 import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
 
 import static java.util.Objects.isNull;
 
 public final class NumberSchema extends BaseSchema {
-    private boolean positiveRule;
-    private boolean rangeRule;
-    private int rangeStart;
-    private int rangeFinish;
+    private static final Predicate<Object> IS_INTEGER = Integer.class::isInstance;
+    private static final Predicate<Object> IS_NULL_OR_INTEGER = objectValue ->
+            isNull(objectValue) || objectValue instanceof Integer;
 
-    @Override
-    public boolean isValid(Object object) {
-        Predicate<Object> isNotNull = objectValue -> !isNull(objectValue);
-        Predicate<Object> isInteger = Integer.class::isInstance;
-        ToIntFunction<Object> convertToInteger = Integer.class::cast;
+    public NumberSchema() {
+        addCheck(Rules.IS_NULL_OR_STRING, IS_NULL_OR_INTEGER);
+    }
 
-        IntPredicate checkRequiredRule = objectInteger ->
-                !requiredRule && isNotNull.negate().test(object)
-                        || isInteger.test(object);
-
-        IntPredicate checkPositiveRule = objectInteger ->
-                !positiveRule
-                        || isNotNull.negate().test(object)
-                        || isInteger.test(object) && objectInteger > 0;
-
-        IntPredicate checkRangeRule = objectInteger ->
-                !rangeRule
-                        || isInteger.test(object) && objectInteger >= rangeStart && objectInteger <= rangeFinish;
-
-        return checkRequiredRule.and(checkPositiveRule.and(checkRangeRule))
-                .test(isNotNull.and(isInteger).test(object)
-                        ? convertToInteger.applyAsInt(object)
-                        : 0);
+    private void addRuleOnlyIntegerObject() {
+        deleteCheck(Rules.IS_NULL_OR_INTEGER);
+        addCheck(Rules.IS_INTEGER, IS_INTEGER);
     }
 
     public NumberSchema positive() {
-        positiveRule = true;
+        Predicate<Object> checkPositiveRule = objectValue -> isNull(objectValue) || (Integer) objectValue > 0;
+        addCheck(Rules.POSITIVE, checkPositiveRule);
         return this;
     }
 
@@ -46,14 +28,14 @@ public final class NumberSchema extends BaseSchema {
         if (start > finish) {
             throw new IllegalArgumentException("Range is not valid.");
         }
-        rangeRule = true;
-        rangeStart = start;
-        rangeFinish = finish;
+        addRuleOnlyIntegerObject();
+        Predicate<Object> checkRangeRule = objectValue ->
+                (Integer) objectValue >= start && (Integer) objectValue <= finish;
+        addCheck(Rules.RANGE, checkRangeRule);
     }
 
-    @Override
     public NumberSchema required() {
-        super.required();
+        addRuleOnlyIntegerObject();
         return this;
     }
 }

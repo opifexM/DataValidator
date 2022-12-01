@@ -1,21 +1,21 @@
 package hexlet.code.schemas;
 
-public abstract class BaseSchema {
-    protected boolean requiredRule;
+import java.util.EnumMap;
+import java.util.function.Predicate;
 
-    /**
-     * @return turn on validation for null
-     */
-    public BaseSchema required() {
-        requiredRule = true;
-        return this;
+public abstract class BaseSchema {
+    private final EnumMap<Rules, Predicate<Object>> checks = new EnumMap<>(Rules.class);
+
+    public boolean isValid(Object object) {
+        return checks.values().stream()
+                .allMatch(predicate -> predicate.test(object));
     }
 
-    /**
-     * @param objText object for null validation
-     * @return true if not null
-     */
-    protected boolean isValid(Object objText) {
-        return !requiredRule || objText != null;
+    protected void addCheck(Rules rules, Predicate<Object> predicate) {
+        checks.put(rules, predicate);
+    }
+
+    protected void deleteCheck(Rules rules) {
+        checks.remove(rules);
     }
 }

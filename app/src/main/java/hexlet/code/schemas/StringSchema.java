@@ -2,64 +2,53 @@ package hexlet.code.schemas;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.util.Objects.isNull;
 
 public final class StringSchema extends BaseSchema {
     private final List<String> dictionary = new ArrayList<>();
-    private int minLength;
-    private boolean lengthRule;
-    private boolean dictionaryRule;
+    private static final Predicate<Object> IS_STRING = String.class::isInstance;
+    private static final Predicate<Object> IS_NULL_OR_STRING = objectValue ->
+            isNull(objectValue) || objectValue instanceof String;
 
-    @Override
-    public boolean isValid(Object object) {
-        Predicate<Object> isNotNull = objectValue -> !isNull(objectValue);
-        Predicate<Object> isString = String.class::isInstance;
-        Function<Object, String> convertToString = String.class::cast;
+    public StringSchema() {
+        addCheck(Rules.IS_NULL_OR_STRING, IS_NULL_OR_STRING);
+    }
 
-        Predicate<String> checkRequiredRule = objectText ->
-                !requiredRule && isNotNull.negate().test(object)
-                        || !requiredRule && isString.test(object)
-                        || requiredRule && isString.test(object) && !objectText.isEmpty();
-
-        Predicate<String> checkLengthRule = objectText ->
-                !lengthRule
-                        || isString.test(object) && objectText.length() >= minLength;
-
-        Predicate<String> textContain = objectText ->
-                dictionary.stream()
-                        .allMatch(objectText::contains);
-        Predicate<String> checkDictionaryRule = objectText ->
-                !dictionaryRule
-                        || isString.test(object) && textContain.test(objectText);
-
-        return checkRequiredRule.and(checkLengthRule.and(checkDictionaryRule))
-                .test(isNotNull.and(isString).test(object)
-                        ? convertToString.apply(object)
-                        : "");
+    private void addRuleOnlyStringObject() {
+        deleteCheck(Rules.IS_NULL_OR_STRING);
+        addCheck(Rules.IS_STRING, IS_STRING);
     }
 
     public StringSchema contains(String word) {
-        if (!isNull(word)) {
+        if (!isNull(word) && !word.isEmpty()) {
             dictionary.add(word);
-            dictionaryRule = true;
+            addRuleOnlyStringObject();
+            Predicate<Object> checkDictionaryRule = objectValue -> {
+                String objectText = (String) objectValue;
+                return dictionary.stream()
+                        .allMatch(objectText::contains);
+            };
+            addCheck(Rules.CONTAINS, checkDictionaryRule);
         }
         return this;
     }
 
     public StringSchema minLength(int number) {
-        if (number >= 0) {
-            minLength = number;
-            lengthRule = true;
+        if (number < 0) {
+            throw new IllegalArgumentException("Length number is not valid.");
         }
+        addRuleOnlyStringObject();
+        Predicate<Object> checkLengthRule = objectValue -> ((String) objectValue).length() >= number;
+        addCheck(Rules.MIN_LENGTH, checkLengthRule);
         return this;
     }
 
-    @Override
     public StringSchema required() {
-        super.required();
+        addRuleOnlyStringObject();
+        Predicate<Object> checkRequiredRule = objectValue -> !((String) objectValue).isEmpty();
+        addCheck(Rules.REQUIRED, checkRequiredRule);
         return this;
     }
 }

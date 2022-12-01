@@ -98,4 +98,21 @@ class StringSchemaTest {
         assertFalse(schema.isValid("text text"));
     }
 
+    @Test
+    void testIsValidShouldFalseWhenContainsThreeInputText() {
+        schema.required();
+        schema.contains("text111");
+        schema.contains("text222");
+        schema.contains("text333");
+        assertFalse(schema.isValid("text text"));
+    }
+
+    @Test
+    void testIsValidShouldTrueWhenContainsThreeInputText() {
+        schema.required();
+        schema.contains("te");
+        schema.contains("xt");
+        schema.contains("ex");
+        assertTrue(schema.isValid("text text"));
+    }
 }
