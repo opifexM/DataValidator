@@ -5,17 +5,12 @@ import java.util.function.Predicate;
 import static java.util.Objects.isNull;
 
 public final class NumberSchema extends BaseSchema {
-    private static final Predicate<Object> IS_INTEGER = Integer.class::isInstance;
-    private static final Predicate<Object> IS_NULL_OR_INTEGER = objectValue ->
-            isNull(objectValue) || objectValue instanceof Integer;
 
     public NumberSchema() {
-        addCheck(Rules.IS_NULL_OR_STRING, IS_NULL_OR_INTEGER);
+        Predicate<Object> checkIsNullOrInteger = objectValue -> isNull(objectValue) || objectValue instanceof Integer;
+        addCheck(Rules.IS_NULL_OR_STRING, checkIsNullOrInteger);
     }
 
-    private void addRuleIntegerObject() {
-        addCheck(Rules.IS_INTEGER, IS_INTEGER);
-    }
 
     public NumberSchema positive() {
         Predicate<Object> checkPositiveRule = objectValue -> isNull(objectValue) || (Integer) objectValue > 0;
@@ -27,14 +22,14 @@ public final class NumberSchema extends BaseSchema {
         if (start > finish) {
             throw new IllegalArgumentException("Range is not valid.");
         }
-        addRuleIntegerObject();
-        Predicate<Object> checkRangeRule = objectValue ->
+        Predicate<Object> checkRangeRule = objectValue -> isNull(objectValue) ||
                 (Integer) objectValue >= start && (Integer) objectValue <= finish;
         addCheck(Rules.RANGE, checkRangeRule);
     }
 
     public NumberSchema required() {
-        addRuleIntegerObject();
+        Predicate<Object> checkIsInteger = Integer.class::isInstance;
+        addCheck(Rules.IS_INTEGER, checkIsInteger);
         return this;
     }
 }
