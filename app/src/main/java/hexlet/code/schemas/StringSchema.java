@@ -34,7 +34,8 @@ public final class StringSchema extends BaseSchema {
         if (number < 0) {
             throw new IllegalArgumentException("Length number is not valid.");
         }
-        Predicate<Object> checkLengthRule = objectValue -> isNull(objectValue) || ((String) objectValue).length() >= number;
+        Predicate<Object> checkLengthRule = objectValue -> isNull(objectValue)
+                || ((String) objectValue).length() >= number;
         addCheck(Rules.MIN_LENGTH, checkLengthRule);
         return this;
     }

@@ -22,8 +22,8 @@ public final class NumberSchema extends BaseSchema {
         if (start > finish) {
             throw new IllegalArgumentException("Range is not valid.");
         }
-        Predicate<Object> checkRangeRule = objectValue -> isNull(objectValue) ||
-                (Integer) objectValue >= start && (Integer) objectValue <= finish;
+        Predicate<Object> checkRangeRule = objectValue -> isNull(objectValue)
+                || (Integer) objectValue >= start && (Integer) objectValue <= finish;
         addCheck(Rules.RANGE, checkRangeRule);
     }
 

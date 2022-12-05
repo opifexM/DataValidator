@@ -13,7 +13,8 @@ public final class MapSchema extends BaseSchema {
     }
 
     public void sizeof(int number) {
-        Predicate<Object> checkSizeofRule = objectValue -> isNull(objectValue) || ((Map<?, ?>) objectValue).size() == number;
+        Predicate<Object> checkSizeofRule = objectValue -> isNull(objectValue)
+                || ((Map<?, ?>) objectValue).size() == number;
         addCheck(Rules.SIZE_OF, checkSizeofRule);
     }
 
