@@ -16,15 +16,14 @@ public final class StringSchema extends BaseSchema {
         addCheck(Rules.IS_NULL_OR_STRING, IS_NULL_OR_STRING);
     }
 
-    private void addRuleOnlyStringObject() {
-        deleteCheck(Rules.IS_NULL_OR_STRING);
+    private void addRuleStringObject() {
         addCheck(Rules.IS_STRING, IS_STRING);
     }
 
     public StringSchema contains(String word) {
         if (!isNull(word) && !word.isEmpty()) {
             dictionary.add(word);
-            addRuleOnlyStringObject();
+            addRuleStringObject();
             Predicate<Object> checkDictionaryRule = objectValue -> {
                 String objectText = (String) objectValue;
                 return dictionary.stream()
@@ -39,14 +38,14 @@ public final class StringSchema extends BaseSchema {
         if (number < 0) {
             throw new IllegalArgumentException("Length number is not valid.");
         }
-        addRuleOnlyStringObject();
+        addRuleStringObject();
         Predicate<Object> checkLengthRule = objectValue -> ((String) objectValue).length() >= number;
         addCheck(Rules.MIN_LENGTH, checkLengthRule);
         return this;
     }
 
     public StringSchema required() {
-        addRuleOnlyStringObject();
+        addRuleStringObject();
         Predicate<Object> checkRequiredRule = objectValue -> !((String) objectValue).isEmpty();
         addCheck(Rules.REQUIRED, checkRequiredRule);
         return this;

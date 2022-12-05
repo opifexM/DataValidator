@@ -14,24 +14,23 @@ public final class MapSchema extends BaseSchema {
         addCheck(Rules.IS_NULL_OR_MAP, IS_NULL_OR_MAP);
     }
 
-    private void addRuleOnlyMapObject() {
-        deleteCheck(Rules.IS_NULL_OR_MAP);
+    private void addRuleMapObject() {
         addCheck(Rules.IS_MAP, IS_MAP);
     }
 
     public void sizeof(int number) {
-        addRuleOnlyMapObject();
+        addRuleMapObject();
         Predicate<Object> checkSizeofRule = objectValue -> ((Map<?, ?>) objectValue).size() == number;
         addCheck(Rules.SIZE_OF, checkSizeofRule);
     }
 
     public MapSchema required() {
-        addRuleOnlyMapObject();
+        addRuleMapObject();
         return this;
     }
 
     public void shape(Map<String, BaseSchema> schemas) {
-        addRuleOnlyMapObject();
+        addRuleMapObject();
         if (!isNull(schemas) && !schemas.isEmpty()) {
             Predicate<Object> checkShapeValues = objectValue ->
                     ((Map<?, ?>) objectValue).entrySet().stream()

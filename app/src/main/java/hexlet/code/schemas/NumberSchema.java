@@ -13,8 +13,7 @@ public final class NumberSchema extends BaseSchema {
         addCheck(Rules.IS_NULL_OR_STRING, IS_NULL_OR_INTEGER);
     }
 
-    private void addRuleOnlyIntegerObject() {
-        deleteCheck(Rules.IS_NULL_OR_INTEGER);
+    private void addRuleIntegerObject() {
         addCheck(Rules.IS_INTEGER, IS_INTEGER);
     }
 
@@ -28,14 +27,14 @@ public final class NumberSchema extends BaseSchema {
         if (start > finish) {
             throw new IllegalArgumentException("Range is not valid.");
         }
-        addRuleOnlyIntegerObject();
+        addRuleIntegerObject();
         Predicate<Object> checkRangeRule = objectValue ->
                 (Integer) objectValue >= start && (Integer) objectValue <= finish;
         addCheck(Rules.RANGE, checkRangeRule);
     }
 
     public NumberSchema required() {
-        addRuleOnlyIntegerObject();
+        addRuleIntegerObject();
         return this;
     }
 }
