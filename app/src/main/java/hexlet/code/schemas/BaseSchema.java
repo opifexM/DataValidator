@@ -22,11 +22,4 @@ public abstract class BaseSchema {
     protected void addCheck(Rules rules, Predicate<Object> predicate) {
         checks.put(rules, predicate);
     }
-
-    /**
-     * @param rules - Delete the rule
-     */
-    protected void deleteCheck(Rules rules) {
-        checks.remove(rules);
-    }
 }
