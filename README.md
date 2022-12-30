@@ -1,4 +1,3 @@
-### Hexlet tests and linter parserStatus:
 [![Java CI](https://github.com/opifexM/java-project-78/actions/workflows/main.yml/badge.svg)](https://github.com/opifexM/java-project-78/actions/workflows/main.yml)
 [![hexlet-check](https://github.com/opifexM/java-project-78/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/opifexM/java-project-78/actions/workflows/hexlet-check.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/9535239562c7bd7ee9b5/maintainability)](https://codeclimate.com/github/opifexM/java-project-78/maintainability)
